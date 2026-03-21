@@ -1,16 +1,16 @@
 import { status } from "elysia";
 import { prisma } from "../../db";
-import { hashPassword } from "./helper";
+import { checkPassword, hashPassword } from "./helper";
 import type { AuthModel } from "./model";
-
+import jwt from "jsonwebtoken"
 
 export abstract class Auth {
-    static async signIn({ username, password, banner, gender, profilePicture, description  }: AuthModel["signInBody"]) {
-        try {
+    static async signUp({ username, password, banner, gender, profilePicture, description  }: AuthModel["signUpBody"]) {
+
 
             const hashedPassword = await hashPassword(password)
 
-            const userExist = await prisma.user.findFirst({
+            const userExist = await prisma.user.findUnique({
                 where: {
                     username
                 }
@@ -37,8 +37,31 @@ export abstract class Auth {
                 message: "User created successfully"
             }
 
-        } catch (error) {
-            throw status(400, "Bad Request")
+        
+    }
+
+    static async signIn({ username, password}: AuthModel["signInBody"]) {
+    
+        const userExist = await prisma.user.findUnique({
+            where: {
+                username
+            }
+        })
+
+        if(!userExist) {
+            throw status(404, "Not Found")
         }
+
+        const verify = await checkPassword(password, userExist.password)
+        if(verify) {
+            const token = jwt.sign({userId: userExist.id}, process.env.JWT_SECRET!)
+            return {
+                token,
+                message: "User sign in successful"
+            }
+        }else {
+            throw status(401, "Unauthorized")
+        }
+    
     }
 }

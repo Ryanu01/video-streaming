@@ -1,7 +1,7 @@
 import { t, type UnwrapSchema } from 'elysia'
 
 export const AuthModel = {
-    signInBody: t.Object({
+    signUpBody: t.Object({
         username: t.String(),
         password: t.String({ minLength: 6 }),
         gender: t.Enum({
@@ -13,8 +13,18 @@ export const AuthModel = {
         profilePicture: t.Optional(t.String()),
         description: t.Optional(t.String())
     }),
-    signInResponse: t.Object({
+    signUpResponse: t.Object({
         username: t.String(),
+        message: t.String()
+    }),
+    signUpInvalid: t.Literal("Invalid values"),
+
+    signInBody: t.Object({
+        username: t.String(),
+        password: t.String()
+    }),
+    signInResponse: t.Object({
+        token: t.String(),
         message: t.String()
     }),
     signInInvalid: t.Literal("Invalid values")
