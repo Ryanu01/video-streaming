@@ -21,12 +21,65 @@ model User {
   channelName       String
   banner            String?
   profilePicture    String?
-  subcriberCount    Int                 @default(0)
+  subscriberCount   Int                 @default(0)
   description       String?
+  uploads           Upload[]
+  likes             Like[]
+  watchHistory      WatchHistory[]
+  subscriptions     Subscription[]      @relation("Subscriptions")
+  subscribers       Subscription[]      @relation("Subscribers")
+}
+
+model Upload {
+  id            String       @id @default(uuid())
+  title         String
+  videoUrl      String
+  thumbnail     String
+  userId        String 
+  likeCount     Int         @default(0)
+  createdAt     DateTime     @default(now())
+  user          User         @relation(fields: [userId], references: [id])
+  type          UploadType
+  likes         Like[]
+  watchHistory  WatchHistory[]
+}
+
+model Like {
+  id          String        @id @default(uuid())
+  uploadId    String
+  userId      String  
+  user        User          @relation(fields: [userId], references: [id])
+  upload      Upload        @relation(fields: [uploadId], references: [id])
+  @@unique([userId, uploadId])
+}
+
+model Subscription {
+  id            String        @id   @default(uuid())
+  channelId     String
+  subscriberId  String
+  subscriber    User          @relation("Subscriptions", fields: [subscriberId], references: [id])
+  channel       User          @relation("Subscribers", fields: [channelId], references: [id])
+
+  createdAt     DateTime      @default(now())
+  @@unique([subscriberId, channelId])
+}
+
+model WatchHistory {
+  id            String      @id @default(uuid())
+  uploadId      String
+  userId        String
+  watchedAt     DateTime    @default(now())
+  user      User     @relation(fields: [userId], references: [id])
+  uploads       Upload      @relation(fields: [uploadId], references: [id])
 }
 
 enum Gender {
   MALE
   FEMALE
   OTHERS
+}
+
+enum UploadType {
+  PRIVATE
+  PUBLIC
 }
