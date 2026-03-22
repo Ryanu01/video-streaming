@@ -40,7 +40,7 @@ export abstract class Auth {
         
     }
 
-    static async signIn({ username, password}: AuthModel["signInBody"]) {
+    static async signIn({ username, password }: AuthModel["signInBody"]): Promise<{ credentialsIsCorrect: boolean, userId?: string }>   {
     
         const userExist = await prisma.user.findUnique({
             where: {
@@ -49,19 +49,17 @@ export abstract class Auth {
         })
 
         if(!userExist) {
-            throw status(404, "Not Found")
+            return { credentialsIsCorrect: false }
         }
 
         const verify = await checkPassword(password, userExist.password)
+        
         if(verify) {
-            const token = jwt.sign({userId: userExist.id}, process.env.JWT_SECRET!)
-            return {
-                token,
-                message: "User sign in successful"
-            }
+            return { credentialsIsCorrect: true, userId: userExist.id }
         }else {
-            throw status(401, "Unauthorized")
+            return { credentialsIsCorrect: false }
         }
+
     
     }
 }

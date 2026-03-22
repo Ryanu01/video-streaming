@@ -24,8 +24,7 @@ export const AuthModel = {
         password: t.String()
     }),
     signInResponse: t.Object({
-        token: t.String(),
-        message: t.String()
+        message: t.Literal("Sign in successfull")
     }),
     signInInvalid: t.Literal("Invalid values")
 }
