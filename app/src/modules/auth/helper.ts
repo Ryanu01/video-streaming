@@ -13,7 +13,3 @@ export async function checkPassword (password: string, encryptedPassword: string
         return false
     }
 }
-
-export function authMiddleware () {
-
-}
