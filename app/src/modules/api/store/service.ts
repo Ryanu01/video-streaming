@@ -12,7 +12,8 @@ export abstract class Store {
         accessKeyId: process.env.ACCESS_KEY_ID!
       }
     })
-    const videoPath = "videos/" + Math.random() + ".mp4"
+    
+    const videoPath = "videos/" + crypto.randomUUID() + ".mp4"
     const putUrl = await getSignedUrl(
       s3,
       new PutObjectCommand({
