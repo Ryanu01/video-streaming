@@ -42,6 +42,7 @@ model Upload {
   type          UploadType
   likes         Like[]
   watchHistory  WatchHistory[]
+  qualities     UploadQuality[]
 }
 
 model Like {
@@ -71,6 +72,15 @@ model WatchHistory {
   watchedAt     DateTime    @default(now())
   user      User     @relation(fields: [userId], references: [id])
   uploads       Upload      @relation(fields: [uploadId], references: [id])
+}
+
+model UploadQuality {
+  id          String      @id @default(uuid())
+  uploadId    String
+  Url720p     String  
+  Url360p     String
+  Url480p     String
+  Upload      Upload     @relation(references: [id], fields: [uploadId])
 }
 
 enum Gender {
