@@ -24,9 +24,7 @@ export abstract class Store {
       { expiresIn: 3600 }
     )
     return {
-      putUrl,
-      finalVidoeUrl: `https://s3.us-east-1.amazonaws.com/${process.env.BUCKET_NAME}/videos/${videoPath}`
-
+      putUrl
     }
   }
 
