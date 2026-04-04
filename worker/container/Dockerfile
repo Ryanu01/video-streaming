@@ -1,4 +1,4 @@
-FROM node:18-alpine AS base
+FROM node:20-alpine AS base
 
 RUN apk update
 RUN apk upgrade 
@@ -10,6 +10,6 @@ COPY package.json .
 COPY package-lock.json .
 RUN npm install 
 
-COPY index.js
+COPY index.js .
 
 CMD ["npm", "start"]
