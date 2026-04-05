@@ -15,7 +15,7 @@ export abstract class Video {
     }
   }
   
-  static async postVideoKeyToRedis({ videoKey }: VideoModel["videoKeyBody"]) {
+  static async postVideoKeyToRedis({ videoKey }: VideoModel["videoKeyBody"]): Promise<number | unknown> {
     try {
       const pushed = await client.lpush("videoKey:", videoKey)
       return pushed;

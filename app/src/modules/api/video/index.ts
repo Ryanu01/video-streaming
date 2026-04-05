@@ -15,14 +15,12 @@ export const apiApp = new Elysia({ prefix: "/api" })
   )
   .resolve(async ({ cookie: { auth }, jwt, status }) => {
   
-
     if (!auth) {
       throw new Response("Unauthorized", { status: 401 })
     }
 
     const decoded = await jwt.verify(auth.value as string)
-    console.log(decoded);
-
+    
     if (!decoded || !decoded.userId) {
       throw new Response("Unauthorized", { status: 401 })
     }
@@ -33,7 +31,6 @@ export const apiApp = new Elysia({ prefix: "/api" })
   })
   .post("/videos/uploaded", async ({ body }) => {
     console.log(body);
-    
     const response = await Video.postVideoKeyToRedis(body)
 
     return {
