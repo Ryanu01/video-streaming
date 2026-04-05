@@ -3,7 +3,7 @@ import { t, UnwrapSchema } from "elysia";
 export const StoreModel = {
   presignedUrlResponse: t.Object({
     putUrl: t.String(),
-    finalVidoeUrl: t.String()
+    videoKey: t.String()
   }),
   presignedUrlInvalid: t.Literal("Url not formed")
 }

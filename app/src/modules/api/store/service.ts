@@ -24,7 +24,8 @@ export abstract class Store {
       { expiresIn: 3600 }
     )
     return {
-      putUrl
+      putUrl,
+      videoKey: videoPath
     }
   }
 

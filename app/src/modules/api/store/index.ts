@@ -11,15 +11,15 @@ export const storeApp = new Elysia({ prefix: "/api" })
     })
   )
   .resolve(async ({ cookie: { auth }, jwt, status }) => {
-    console.log(auth);
+
+    
 
     if (!auth) {
       throw new Response("Unauthorized", { status: 401 })
     }
-
+    
     const decoded = await jwt.verify(auth.value as string)
-    console.log(decoded);
-
+    
     if (!decoded || !decoded.userId) {
       throw new Response("Unauthorized", { status: 401 })
     }
@@ -28,7 +28,7 @@ export const storeApp = new Elysia({ prefix: "/api" })
       userId: decoded.userId as string
     }
   })
-  .post("/get-url", async ({ body }) => {
+  .get("/get-url", async ({ body }) => {
     const response = await Store.getPresignedUrl()
 
     return response
